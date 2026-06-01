@@ -7,7 +7,7 @@ export function register(coreUpdate) {
         scope: 'client',
         config: true,
         type: Boolean,
-        default: false,
+        default: true,
         onChange: (value) => coreUpdate(value),
     })
 
