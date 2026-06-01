@@ -32,6 +32,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case 'skill':
                     if (!isRightClick) await this.#handleSkillRoll(actor, system.actionId, system.skillCatId)
                     break
+                case 'skillGroup':
+                    if (!isRightClick) await this.#handleSkillGroupRoll(actor, system.actionId)
+                    break
                 case 'weapon':
                     if (!isRightClick) await this.#handleWeaponRoll(actor, system.actionId)
                     break
@@ -61,6 +64,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 return
             }
             new game.l5r5e.DicePickerDialog({ actor, skillId, skillCatId }).render(true)
+        }
+
+        async #handleSkillGroupRoll (actor, skillCatId) {
+            if (!game.l5r5e?.DicePickerDialog) {
+                ui.notifications.error('L5R5e system: DicePickerDialog not available.')
+                return
+            }
+            new game.l5r5e.DicePickerDialog({ actor, skillCatId }).render(true)
         }
 
         async #handleWeaponRoll (actor, itemId) {

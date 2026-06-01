@@ -34,6 +34,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             } else if (this.actorType === 'npc') {
                 await Promise.all([
                     this.#buildRings(),
+                    this.#buildNpcSkillGroups(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
                     this.#buildResources(),
@@ -88,6 +89,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
 
                 if (actions.length > 0) this.addActions(actions, groupData)
+            }
+        }
+
+        async #buildNpcSkillGroups () {
+            const skillGroups = this.actor.system.skill_groups ?? {}
+            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
+
+            for (const catId of Object.keys(SKILLS_BY_CATEGORY)) {
+                const rank = skillGroups[catId] ?? 0
+                const groupData = { id: `skills-${catId}`, type: 'system' }
+                const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillGroupNames.${catId}`)
+                this.addActions([{
+                    id: `skill-group-${catId}`,
+                    name,
+                    listName: `${actionTypeName}: ${name}`,
+                    info1: { text: String(rank) },
+                    system: { actionType: 'skillGroup', actionId: catId },
+                }], groupData)
             }
         }
 

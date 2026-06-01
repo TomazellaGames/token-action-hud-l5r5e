@@ -16,11 +16,21 @@
             "composure":  "Composure",
             "voidPoints": "Void Points",
 
+            "skillGroup":    "Skill Group",
+
             "skillsArtisan": "Artisan Skills",
             "skillsMartial": "Martial Skills",
             "skillsScholar": "Scholar Skills",
             "skillsSocial":  "Social Skills",
             "skillsTrade":   "Trade Skills",
+
+            "skillGroupNames": {
+                "artisan": "Artisan",
+                "martial": "Martial",
+                "scholar": "Scholar",
+                "social":  "Social",
+                "trade":   "Trade"
+            },
 
             "techniquesKata":        "Kata",
             "techniquesKiho":        "Kiho",

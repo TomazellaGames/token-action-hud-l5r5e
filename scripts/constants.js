@@ -9,12 +9,13 @@ export const CORE_MODULE = {
 export const REQUIRED_CORE_MODULE_VERSION = '2.1'
 
 export const ACTION_TYPE = {
-    ring:      'tokenActionHud.l5r5e.ring',
-    skill:     'tokenActionHud.l5r5e.skill',
-    weapon:    'tokenActionHud.l5r5e.weapon',
-    technique: 'tokenActionHud.l5r5e.technique',
-    resource:  'tokenActionHud.l5r5e.resource',
-    utility:   'tokenActionHud.utility',
+    ring:       'tokenActionHud.l5r5e.ring',
+    skill:      'tokenActionHud.l5r5e.skill',
+    skillGroup: 'tokenActionHud.l5r5e.skillGroup',
+    weapon:     'tokenActionHud.l5r5e.weapon',
+    technique:  'tokenActionHud.l5r5e.technique',
+    resource:   'tokenActionHud.l5r5e.resource',
+    utility:    'tokenActionHud.utility',
 }
 
 export const GROUP = {
