@@ -1,14 +1,20 @@
 {
     "tokenActionHud": {
         "l5r5e": {
-            "ring":      "Ring",
-            "rings":     "Rings",
-            "skill":     "Skill",
-            "skills":    "Skills",
-            "weapon":    "Weapon",
-            "weapons":   "Weapons",
-            "technique": "Technique",
+            "ring":       "Ring",
+            "rings":      "Rings",
+            "skill":      "Skill",
+            "skills":     "Skills",
+            "weapon":     "Weapon",
+            "weapons":    "Weapons",
+            "technique":  "Technique",
             "techniques": "Techniques",
+            "resource":   "Resource",
+            "resources":  "Resources",
+            "conflict":   "Conflict",
+            "endurance":  "Endurance",
+            "composure":  "Composure",
+            "voidPoints": "Void Points",
 
             "skillsArtisan": "Artisan Skills",
             "skillsMartial": "Martial Skills",

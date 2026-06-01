@@ -62,6 +62,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ],
             },
             {
+                nestId: 'conflict',
+                id: 'conflict',
+                name: i18n('tokenActionHud.l5r5e.conflict'),
+                groups: [
+                    { ...groups.conflictWeapons, nestId: 'conflict_weapons'   },
+                    { ...groups.resources,       nestId: 'conflict_resources' },
+                ],
+            },
+            {
                 nestId: 'utility',
                 id: 'utility',
                 name: i18n('tokenActionHud.utility'),

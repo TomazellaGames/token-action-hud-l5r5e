@@ -28,6 +28,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildSkills(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
+                    this.#buildConflictWeapons(),
+                    this.#buildResources(),
                     this.#buildCombat(),
                 ])
             } else if (this.actorType === 'npc') {
@@ -35,6 +37,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildRings(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
+                    this.#buildConflictWeapons(),
+                    this.#buildResources(),
                     this.#buildCombat(),
                 ])
             } else if (!this.actor) {
@@ -137,6 +141,68 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }))
                 this.addActions(actions, groupData)
             }
+        }
+
+        async #buildConflictWeapons () {
+            if (!this.items) return
+            const showUnready = Utils.getSetting('showUnreadyWeapons')
+            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.weapon)
+            const groupData = GROUP.conflictWeapons
+
+            const actions = this.items
+                .filter(item => item.type === 'weapon' && (showUnready || item.system.readied))
+                .map(item => {
+                    const dmg = item.system.damage ?? 0
+                    const dead = item.system.deadliness ?? 0
+                    return {
+                        id: `conflict-weapon-${item.id}`,
+                        name: item.name,
+                        listName: `${actionTypeName}: ${item.name}`,
+                        img: coreModule.api.Utils.getImage(item),
+                        info1: { text: `${dmg}/${dead}`, title: `Damage: ${dmg} / Deadliness: ${dead}` },
+                        system: { actionType: 'weapon', actionId: item.id },
+                    }
+                })
+
+            if (actions.length > 0) this.addActions(actions, groupData)
+        }
+
+        async #buildResources () {
+            const sys = this.actor.system
+            const i18n = (key) => coreModule.api.Utils.i18n(key)
+
+            const fatigue   = sys.fatigue?.value ?? 0
+            const endurance = sys.endurance ?? sys.fatigue?.max ?? 0
+            const strife    = sys.strife?.value ?? 0
+            const composure = sys.composure ?? sys.strife?.max ?? 0
+            const voidValue = sys.void_points?.value ?? 0
+            const voidMax   = sys.void_points?.max ?? 0
+
+            const actions = [
+                {
+                    id: 'resource-endurance',
+                    name: i18n('tokenActionHud.l5r5e.endurance'),
+                    listName: i18n('tokenActionHud.l5r5e.endurance'),
+                    info1: { text: `${fatigue}/${endurance}`, title: `Fatigue: ${fatigue} / Endurance: ${endurance}` },
+                    system: { actionType: 'resource', actionId: 'fatigue' },
+                },
+                {
+                    id: 'resource-composure',
+                    name: i18n('tokenActionHud.l5r5e.composure'),
+                    listName: i18n('tokenActionHud.l5r5e.composure'),
+                    info1: { text: `${strife}/${composure}`, title: `Strife: ${strife} / Composure: ${composure}` },
+                    system: { actionType: 'resource', actionId: 'strife' },
+                },
+                {
+                    id: 'resource-void',
+                    name: i18n('tokenActionHud.l5r5e.voidPoints'),
+                    listName: i18n('tokenActionHud.l5r5e.voidPoints'),
+                    info1: { text: `${voidValue}/${voidMax}`, title: `Void Points: ${voidValue} / ${voidMax}` },
+                    system: { actionType: 'resource', actionId: 'voidPoints' },
+                },
+            ]
+
+            this.addActions(actions, GROUP.resources)
         }
 
         async #buildCombat () {

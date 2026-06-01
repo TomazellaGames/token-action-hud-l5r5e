@@ -5,7 +5,18 @@
       "Bash(npm install *)",
       "PowerShell(Get-Command node -ErrorAction SilentlyContinue; Get-Command npm -ErrorAction SilentlyContinue; ls \"C:\\\\Program Files\\\\nodejs\\\\\" -ErrorAction SilentlyContinue; ls \"$env:APPDATA\\\\npm\" -ErrorAction SilentlyContinue; ls \"$env:ProgramFiles\\\\Node.js\" -ErrorAction SilentlyContinue)",
       "Read(//c/Program Files/**)",
-      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\nvm\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:LOCALAPPDATA\\\\nvm\" -ErrorAction SilentlyContinue; where.exe node 2>$null; $env:PATH -split \";\" | Where-Object { $_ -match \"node|nvm\" })"
+      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\nvm\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:LOCALAPPDATA\\\\nvm\" -ErrorAction SilentlyContinue; where.exe node 2>$null; $env:PATH -split \";\" | Where-Object { $_ -match \"node|nvm\" })",
+      "Bash(curl -s \"https://gitlab.com/teaml5r/l5r5e/-/raw/main/template.json\")",
+      "WebSearch",
+      "Bash(curl -s \"https://gitlab.com/teaml5r/l5r5e/-/raw/master/template.json\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/L4D15/foundry-vtt-l5r/main/template.json\")",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:foundryvtt.com)",
+      "WebFetch(domain:foundryvtt.wiki)",
+      "Bash(curl -s \"https://api.github.com/repos/EduardoBugs/fvtt-token-action-hud-l5r5e/contents\")",
+      "WebFetch(domain:www.foundryvtt-hub.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/EduardoBugs/fvtt-token-action-hud-l5r5e/main/module.json\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/EduardoBugs/fvtt-token-action-hud-l5r5e/main/languages/en.json\")"
     ]
   }
 }
