@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:gitlab.com)",
+      "Bash(npm install *)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue; Get-Command npm -ErrorAction SilentlyContinue; ls \"C:\\\\Program Files\\\\nodejs\\\\\" -ErrorAction SilentlyContinue; ls \"$env:APPDATA\\\\npm\" -ErrorAction SilentlyContinue; ls \"$env:ProgramFiles\\\\Node.js\" -ErrorAction SilentlyContinue)",
+      "Read(//c/Program Files/**)",
+      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\nvm\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:LOCALAPPDATA\\\\nvm\" -ErrorAction SilentlyContinue; where.exe node 2>$null; $env:PATH -split \";\" | Where-Object { $_ -match \"node|nvm\" })"
+    ]
+  }
+}

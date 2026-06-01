@@ -1,0 +1,13 @@
+{
+  "name": "token-action-hud-l5r5e",
+  "version": "1.0.0",
+  "description": "Token Action HUD system module for the Legend of the Five Rings 5e Foundry VTT system",
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs",
+    "dev": "rollup -c rollup.config.mjs --watch"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.0.0"
+  }
+}

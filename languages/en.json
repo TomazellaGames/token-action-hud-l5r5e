@@ -1,0 +1,75 @@
+{
+    "tokenActionHud": {
+        "l5r5e": {
+            "ring":      "Ring",
+            "rings":     "Rings",
+            "skill":     "Skill",
+            "skills":    "Skills",
+            "weapon":    "Weapon",
+            "weapons":   "Weapons",
+            "technique": "Technique",
+            "techniques": "Techniques",
+
+            "skillsArtisan": "Artisan Skills",
+            "skillsMartial": "Martial Skills",
+            "skillsScholar": "Scholar Skills",
+            "skillsSocial":  "Social Skills",
+            "skillsTrade":   "Trade Skills",
+
+            "techniquesKata":        "Kata",
+            "techniquesKiho":        "Kiho",
+            "techniquesInvocations": "Invocations",
+            "techniquesShuji":       "Shuji",
+            "techniquesRituals":     "Rituals",
+            "techniquesMaho":        "Maho",
+            "techniquesNinjutsu":    "Ninjutsu",
+            "techniquesOther":       "Other Techniques",
+
+            "rings": {
+                "air":   "Air",
+                "earth": "Earth",
+                "fire":  "Fire",
+                "water": "Water",
+                "void":  "Void"
+            },
+
+            "skills": {
+                "aesthetics":  "Aesthetics",
+                "composition": "Composition",
+                "design":      "Design",
+                "smithing":    "Smithing",
+                "fitness":     "Fitness",
+                "melee":       "Melee",
+                "ranged":      "Ranged",
+                "unarmed":     "Unarmed",
+                "meditation":  "Meditation",
+                "tactics":     "Tactics",
+                "culture":     "Culture",
+                "government":  "Government",
+                "medicine":    "Medicine",
+                "sentiment":   "Sentiment",
+                "theology":    "Theology",
+                "command":     "Command",
+                "courtesy":    "Courtesy",
+                "games":       "Games",
+                "performance": "Performance",
+                "commerce":    "Commerce",
+                "labor":       "Labor",
+                "seafaring":   "Seafaring",
+                "skulduggery": "Skulduggery",
+                "survival":    "Survival"
+            },
+
+            "settings": {
+                "showZeroRankSkills": {
+                    "name": "Show Zero-Rank Skills",
+                    "hint": "Show skills where the character has no ranks (rank 0) in the HUD."
+                },
+                "showUnreadyWeapons": {
+                    "name": "Show Unready Weapons",
+                    "hint": "Show weapons that are not currently readied in the HUD."
+                }
+            }
+        }
+    }
+}
