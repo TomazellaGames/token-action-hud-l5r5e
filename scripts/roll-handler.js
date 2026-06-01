@@ -25,18 +25,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         async #handleAction (event, actor, token, system, isRightClick) {
+            const difficulty = this.#computeDifficulty(system)
+
             switch (system.actionType) {
                 case 'ring':
-                    if (!isRightClick) await this.#handleRingRoll(actor, system.actionId)
+                    if (!isRightClick) await this.#handleRingRoll(actor, system.actionId, difficulty)
                     break
                 case 'skill':
-                    if (!isRightClick) await this.#handleSkillRoll(actor, system.actionId, system.skillCatId)
+                    if (!isRightClick) await this.#handleSkillRoll(actor, system.actionId, system.skillCatId, difficulty)
                     break
                 case 'skillGroup':
-                    if (!isRightClick) await this.#handleSkillGroupRoll(actor, system.actionId)
+                    if (!isRightClick) await this.#handleSkillGroupRoll(actor, system.actionId, difficulty)
                     break
                 case 'weapon':
-                    if (!isRightClick) await this.#handleWeaponRoll(actor, system.actionId)
+                    if (!isRightClick) await this.#handleWeaponRoll(actor, system.actionId, difficulty)
                     break
                 case 'technique':
                     // Read-only: hover tooltip shows description, click has no effect
@@ -50,38 +52,56 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
         }
 
-        async #handleRingRoll (actor, ringId) {
+        #computeDifficulty (system) {
+            const isCombat = (
+                system.actionType === 'weapon' ||
+                (system.actionType === 'skillGroup' && system.actionId === 'martial') ||
+                (system.actionType === 'skill' && system.skillCatId === 'martial')
+            )
+
+            if (!isCombat) return 1
+
+            const targets = game.user.targets
+            if (targets.size !== 1) return 2
+
+            const targetAir = [...targets][0].actor?.system?.rings?.air ?? 0
+            if (targetAir >= 4) return 4
+            if (targetAir >= 1) return 3
+            return 2
+        }
+
+        async #handleRingRoll (actor, ringId, difficulty) {
             if (!game.l5r5e?.DicePickerDialog) {
                 ui.notifications.error('L5R5e system: DicePickerDialog not available.')
                 return
             }
-            new game.l5r5e.DicePickerDialog({ actor, ringId }).render(true)
+            new game.l5r5e.DicePickerDialog({ actor, ringId, difficulty }).render(true)
         }
 
-        async #handleSkillRoll (actor, skillId, skillCatId) {
+        async #handleSkillRoll (actor, skillId, skillCatId, difficulty) {
             if (!game.l5r5e?.DicePickerDialog) {
                 ui.notifications.error('L5R5e system: DicePickerDialog not available.')
                 return
             }
-            new game.l5r5e.DicePickerDialog({ actor, skillId, skillCatId }).render(true)
+            new game.l5r5e.DicePickerDialog({ actor, skillId, skillCatId, difficulty }).render(true)
         }
 
-        async #handleSkillGroupRoll (actor, skillCatId) {
+        async #handleSkillGroupRoll (actor, skillCatId, difficulty) {
             if (!game.l5r5e?.DicePickerDialog) {
                 ui.notifications.error('L5R5e system: DicePickerDialog not available.')
                 return
             }
-            new game.l5r5e.DicePickerDialog({ actor, skillCatId }).render(true)
+            new game.l5r5e.DicePickerDialog({ actor, skillCatId, difficulty }).render(true)
         }
 
-        async #handleWeaponRoll (actor, itemId) {
+        async #handleWeaponRoll (actor, itemId, difficulty) {
             if (!game.l5r5e?.DicePickerDialog) {
                 ui.notifications.error('L5R5e system: DicePickerDialog not available.')
                 return
             }
             const item = actor.items.get(itemId)
             if (!item) return
-            new game.l5r5e.DicePickerDialog({ actor, itemUuid: item.uuid }).render(true)
+            new game.l5r5e.DicePickerDialog({ actor, itemUuid: item.uuid, difficulty }).render(true)
         }
 
         async #handleResourceAction (actor, resourceId, isRightClick) {
