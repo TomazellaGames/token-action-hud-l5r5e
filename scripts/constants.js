@@ -6,7 +6,7 @@ export const CORE_MODULE = {
     ID: 'token-action-hud-core',
 }
 
-export const REQUIRED_CORE_MODULE_VERSION = '2.0'
+export const REQUIRED_CORE_MODULE_VERSION = '2.1'
 
 export const ACTION_TYPE = {
     ring:      'tokenActionHud.l5r5e.ring',
