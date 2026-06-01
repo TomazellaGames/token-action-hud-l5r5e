@@ -18,7 +18,7 @@
         "verified": "14"
     },
     "esmodules": [
-        "./scripts/token-action-hud-l5r5e.min.js"
+        "./scripts/init.js"
     ],
     "styles": [
         "./styles/tah-l5r5e.css"
