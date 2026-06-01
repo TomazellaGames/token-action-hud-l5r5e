@@ -17,7 +17,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (this.actor && !['character', 'npc'].includes(this.actorType)) return
 
             if (this.actor) {
-                this.items = coreModule.api.Utils.sortItemsByName(Array.from(this.actor.items))
+                this.items = Array.from(this.actor.items).sort((a, b) =>
+                    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+                )
             }
 
             if (this.actorType === 'character') {
