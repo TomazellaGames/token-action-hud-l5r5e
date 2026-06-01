@@ -41,7 +41,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     if (!isRightClick) await this.#handleWeaponRoll(actor, system.actionId, difficulty)
                     break
                 case 'technique':
+                case 'peculiarity':
+                case 'bond':
                     if (!isRightClick) await this.#handleTechniqueActivation(actor, system.actionId)
+                    break
+                case 'narrativeText':
                     break
                 case 'resource':
                     await this.#handleResourceAction(actor, system.actionId, isRightClick)

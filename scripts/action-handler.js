@@ -28,6 +28,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildSkills(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
+                    this.#buildNarrative(),
                     this.#buildResources(),
                     this.#buildCombat(),
                 ])
@@ -162,6 +163,63 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 })
                 this.addActions(actions, groupData)
             }
+        }
+
+        async #buildNarrative () {
+            const i18n = (key) => coreModule.api.Utils.i18n(key)
+            const toTooltip = (html) => (html ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+
+            // Distinctions & Passions / Adversities & Anxieties
+            const peculiarities = this.items.filter(i => i.type === 'peculiarity')
+            for (const { types, group } of [
+                { types: ['distinction', 'passion'], group: GROUP.narrativeDistinctionsPassions },
+                { types: ['adversity',   'anxiety'], group: GROUP.narrativeAdversitiesAnxieties },
+            ]) {
+                const actions = peculiarities
+                    .filter(i => types.includes(i.system.peculiarity_type))
+                    .map(item => ({
+                        id:       `peculiarity-${item.id}`,
+                        name:     item.name,
+                        listName: item.name,
+                        img:      coreModule.api.Utils.getImage(item),
+                        tooltip:  toTooltip(item.system.description),
+                        system:   { actionType: 'peculiarity', actionId: item.id },
+                    }))
+                if (actions.length > 0) this.addActions(actions, group)
+            }
+
+            // Bonds
+            const bondActions = this.items
+                .filter(i => i.type === 'bond')
+                .map(item => ({
+                    id:       `bond-${item.id}`,
+                    name:     item.name,
+                    listName: item.name,
+                    img:      coreModule.api.Utils.getImage(item),
+                    info1:    { text: String(item.system.rank ?? '') },
+                    tooltip:  toTooltip(item.system.description),
+                    system:   { actionType: 'bond', actionId: item.id },
+                }))
+            if (bondActions.length > 0) this.addActions(bondActions, GROUP.narrativeBonds)
+
+            // Ninjo, Giri, Paramount tenet, Less Significant tenet
+            const social = this.actor.system.social ?? {}
+            const tenets = social.bushido_tenets ?? {}
+            const textActions = [
+                { id: 'ninjo',            label: i18n('tokenActionHud.l5r5e.narrativeNinjo'),            value: social.ninjo               },
+                { id: 'giri',             label: i18n('tokenActionHud.l5r5e.narrativeGiri'),             value: social.giri                },
+                { id: 'paramount',        label: i18n('tokenActionHud.l5r5e.narrativeParamount'),        value: tenets.paramount           },
+                { id: 'less-significant', label: i18n('tokenActionHud.l5r5e.narrativeLessSignificant'), value: tenets.less_significant    },
+            ]
+                .filter(({ value }) => value)
+                .map(({ id, label, value }) => ({
+                    id:       `narrative-${id}`,
+                    name:     label,
+                    listName: label,
+                    tooltip:  value,
+                    system:   { actionType: 'narrativeText', actionId: id },
+                }))
+            if (textActions.length > 0) this.addActions(textActions, GROUP.narrativeCharacter)
         }
 
         async #buildResources () {

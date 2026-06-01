@@ -76,6 +76,21 @@
                 "survival":    "Survival"
             },
 
+            "narrative":    "Narrative",
+            "peculiarity":  "Peculiarity",
+            "bond":         "Bond",
+            "narrativeText": "Narrative",
+
+            "narrativeDistinctionsPassions": "Distinctions & Passions",
+            "narrativeAdversitiesAnxieties": "Adversities & Anxieties",
+            "narrativeBonds":                "Bonds",
+            "narrativeCharacter":            "Character",
+
+            "narrativeNinjo":            "Ninjo",
+            "narrativeGiri":             "Giri",
+            "narrativeParamount":        "Paramount Tenet",
+            "narrativeLessSignificant":  "Less Significant Tenet",
+
             "settings": {
                 "showZeroRankSkills": {
                     "name": "Show Zero-Rank Skills",

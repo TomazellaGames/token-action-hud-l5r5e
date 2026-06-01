@@ -62,6 +62,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ],
             },
             {
+                nestId: 'narrative',
+                id: 'narrative',
+                name: i18n('tokenActionHud.l5r5e.narrative'),
+                groups: [
+                    { ...groups.narrativeDistinctionsPassions, nestId: 'narrative_distinctions-passions' },
+                    { ...groups.narrativeAdversitiesAnxieties, nestId: 'narrative_adversities-anxieties' },
+                    { ...groups.narrativeBonds,                nestId: 'narrative_bonds'                 },
+                    { ...groups.narrativeCharacter,            nestId: 'narrative_character'             },
+                ],
+            },
+            {
                 nestId: 'stat-resources',
                 id: 'stat-resources',
                 name: i18n('tokenActionHud.l5r5e.resources'),

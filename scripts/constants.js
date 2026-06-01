@@ -9,13 +9,16 @@ export const CORE_MODULE = {
 export const REQUIRED_CORE_MODULE_VERSION = '2.1'
 
 export const ACTION_TYPE = {
-    ring:       'tokenActionHud.l5r5e.ring',
-    skill:      'tokenActionHud.l5r5e.skill',
-    skillGroup: 'tokenActionHud.l5r5e.skillGroup',
-    weapon:     'tokenActionHud.l5r5e.weapon',
-    technique:  'tokenActionHud.l5r5e.technique',
-    resource:   'tokenActionHud.l5r5e.resource',
-    utility:    'tokenActionHud.utility',
+    ring:          'tokenActionHud.l5r5e.ring',
+    skill:         'tokenActionHud.l5r5e.skill',
+    skillGroup:    'tokenActionHud.l5r5e.skillGroup',
+    weapon:        'tokenActionHud.l5r5e.weapon',
+    technique:     'tokenActionHud.l5r5e.technique',
+    peculiarity:   'tokenActionHud.l5r5e.peculiarity',
+    bond:          'tokenActionHud.l5r5e.bond',
+    narrativeText: 'tokenActionHud.l5r5e.narrativeText',
+    resource:      'tokenActionHud.l5r5e.resource',
+    utility:       'tokenActionHud.utility',
 }
 
 export const GROUP = {
@@ -34,8 +37,12 @@ export const GROUP = {
     techniquesMaho:        { id: 'techniques-maho',        name: 'tokenActionHud.l5r5e.techniquesMaho',        type: 'system' },
     techniquesNinjutsu:    { id: 'techniques-ninjutsu',    name: 'tokenActionHud.l5r5e.techniquesNinjutsu',    type: 'system' },
     techniquesOther:       { id: 'techniques-other',       name: 'tokenActionHud.l5r5e.techniquesOther',       type: 'system' },
-    resources:             { id: 'resources',             name: 'tokenActionHud.l5r5e.resources',             type: 'system' },
-    combat:                { id: 'combat',                 name: 'tokenActionHud.combat',                      type: 'system' },
+    narrativeDistinctionsPassions: { id: 'narrative-distinctions-passions', name: 'tokenActionHud.l5r5e.narrativeDistinctionsPassions', type: 'system' },
+    narrativeAdversitiesAnxieties: { id: 'narrative-adversities-anxieties', name: 'tokenActionHud.l5r5e.narrativeAdversitiesAnxieties', type: 'system' },
+    narrativeBonds:                { id: 'narrative-bonds',                  name: 'tokenActionHud.l5r5e.narrativeBonds',                 type: 'system' },
+    narrativeCharacter:            { id: 'narrative-character',              name: 'tokenActionHud.l5r5e.narrativeCharacter',             type: 'system' },
+    resources:                     { id: 'resources',                        name: 'tokenActionHud.l5r5e.resources',                      type: 'system' },
+    combat:                        { id: 'combat',                           name: 'tokenActionHud.combat',                               type: 'system' },
 }
 
 export const RINGS = ['air', 'earth', 'fire', 'water', 'void']
