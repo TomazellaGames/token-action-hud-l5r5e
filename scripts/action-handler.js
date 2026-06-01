@@ -93,7 +93,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         async #buildNpcSkillGroups () {
-            const skillGroups = this.actor.system.skill_groups ?? {}
+            const skillGroups = this.actor.system.skills ?? {}
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
 
             for (const catId of Object.keys(SKILLS_BY_CATEGORY)) {
