@@ -41,7 +41,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     if (!isRightClick) await this.#handleWeaponRoll(actor, system.actionId, difficulty)
                     break
                 case 'technique':
-                    // Read-only: hover tooltip shows description, click has no effect
+                    if (!isRightClick) await this.#handleTechniqueActivation(actor, system.actionId)
                     break
                 case 'resource':
                     await this.#handleResourceAction(actor, system.actionId, isRightClick)
@@ -102,6 +102,22 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const item = actor.items.get(itemId)
             if (!item) return
             new game.l5r5e.DicePickerDialog({ actor, itemUuid: item.uuid, difficulty }).render(true)
+        }
+
+        async #handleTechniqueActivation (actor, itemId) {
+            const item = actor.items.get(itemId)
+            if (!item?.system?.skill) return
+            if (!game.l5r5e?.DicePickerDialog) {
+                ui.notifications.error('L5R5e system: DicePickerDialog not available.')
+                return
+            }
+            new game.l5r5e.DicePickerDialog({
+                actor,
+                ringId:     item.system.ring       || null,
+                difficulty: item.system.difficulty  || null,
+                skillsList: item.system.skill       || null,
+                itemUuid:   item.uuid,
+            }).render(true)
         }
 
         async #handleResourceAction (actor, resourceId, isRightClick) {
