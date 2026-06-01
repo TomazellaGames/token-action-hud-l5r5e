@@ -2,7 +2,7 @@
     "id": "token-action-hud-l5r5e",
     "title": "Token Action HUD - Legend of the Five Rings 5e",
     "description": "Token Action HUD system module for the Legend of the Five Rings 5th Edition Foundry VTT system. Provides a repositionable HUD of common actions for selected tokens.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "authors": [
         {
             "name": "Jeferson Tomazella",
