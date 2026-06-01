@@ -28,7 +28,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildSkills(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
-                    this.#buildConflictWeapons(),
                     this.#buildResources(),
                     this.#buildCombat(),
                 ])
@@ -37,7 +36,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildRings(),
                     this.#buildWeapons(),
                     this.#buildTechniques(),
-                    this.#buildConflictWeapons(),
                     this.#buildResources(),
                     this.#buildCombat(),
                 ])
@@ -95,12 +93,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         async #buildWeapons () {
             if (!this.items) return
-            const showUnready = Utils.getSetting('showUnreadyWeapons')
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.weapon)
             const groupData = GROUP.weapons
 
             const actions = this.items
-                .filter(item => item.type === 'weapon' && (showUnready || item.system.readied))
+                .filter(item => item.type === 'weapon')
                 .map(item => {
                     const dmg = item.system.damage ?? 0
                     const dead = item.system.deadliness ?? 0
@@ -132,39 +129,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             for (const [groupId, items] of byGroup) {
                 const groupData = { id: groupId, type: 'system' }
-                const actions = items.map(item => ({
-                    id: `technique-${item.id}`,
-                    name: item.name,
-                    listName: `${actionTypeName}: ${item.name}`,
-                    img: coreModule.api.Utils.getImage(item),
-                    system: { actionType: 'technique', actionId: item.id },
-                }))
-                this.addActions(actions, groupData)
-            }
-        }
-
-        async #buildConflictWeapons () {
-            if (!this.items) return
-            const showUnready = Utils.getSetting('showUnreadyWeapons')
-            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.weapon)
-            const groupData = GROUP.conflictWeapons
-
-            const actions = this.items
-                .filter(item => item.type === 'weapon' && (showUnready || item.system.readied))
-                .map(item => {
-                    const dmg = item.system.damage ?? 0
-                    const dead = item.system.deadliness ?? 0
+                const actions = items.map(item => {
+                    const rawDesc = item.system.description ?? ''
+                    const tooltip = rawDesc.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
                     return {
-                        id: `conflict-weapon-${item.id}`,
+                        id: `technique-${item.id}`,
                         name: item.name,
                         listName: `${actionTypeName}: ${item.name}`,
                         img: coreModule.api.Utils.getImage(item),
-                        info1: { text: `${dmg}/${dead}`, title: `Damage: ${dmg} / Deadliness: ${dead}` },
-                        system: { actionType: 'weapon', actionId: item.id },
+                        tooltip,
+                        system: { actionType: 'technique', actionId: item.id },
                     }
                 })
-
-            if (actions.length > 0) this.addActions(actions, groupData)
+                this.addActions(actions, groupData)
+            }
         }
 
         async #buildResources () {

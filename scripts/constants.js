@@ -33,7 +33,6 @@ export const GROUP = {
     techniquesMaho:        { id: 'techniques-maho',        name: 'tokenActionHud.l5r5e.techniquesMaho',        type: 'system' },
     techniquesNinjutsu:    { id: 'techniques-ninjutsu',    name: 'tokenActionHud.l5r5e.techniquesNinjutsu',    type: 'system' },
     techniquesOther:       { id: 'techniques-other',       name: 'tokenActionHud.l5r5e.techniquesOther',       type: 'system' },
-    conflictWeapons:       { id: 'conflict-weapons',       name: 'tokenActionHud.l5r5e.weapons',               type: 'system' },
     resources:             { id: 'resources',             name: 'tokenActionHud.l5r5e.resources',             type: 'system' },
     combat:                { id: 'combat',                 name: 'tokenActionHud.combat',                      type: 'system' },
 }
