@@ -31,7 +31,7 @@
             "techniquesNinjutsu":    "Ninjutsu",
             "techniquesOther":       "Other Techniques",
 
-            "rings": {
+            "ringNames": {
                 "air":   "Air",
                 "earth": "Earth",
                 "fire":  "Fire",
@@ -39,7 +39,7 @@
                 "void":  "Void"
             },
 
-            "skills": {
+            "skillNames": {
                 "aesthetics":  "Aesthetics",
                 "composition": "Composition",
                 "design":      "Design",

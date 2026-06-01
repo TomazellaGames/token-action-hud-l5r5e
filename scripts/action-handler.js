@@ -53,7 +53,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const actions = RINGS.map(ringId => {
                 const rank = actorRings[ringId] ?? 0
-                const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.rings.${ringId}`)
+                const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.ringNames.${ringId}`)
                 return {
                     id: `ring-${ringId}`,
                     name,
@@ -79,7 +79,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 for (const skillId of skillList) {
                     const rank = catSkills[skillId] ?? 0
                     if (!showZero && rank === 0) continue
-                    const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skills.${skillId}`)
+                    const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillNames.${skillId}`)
                     actions.push({
                         id: `skill-${catId}-${skillId}`,
                         name,
