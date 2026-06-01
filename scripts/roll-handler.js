@@ -5,11 +5,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     RollHandler = class RollHandler extends coreModule.api.RollHandler {
 
         async handleActionClick (event) {
-            await this.#dispatch(event, false)
-        }
-
-        async handleActionRightClick (event) {
-            await this.#dispatch(event, true)
+            const isRightClick = event.button === 2 || event.type === 'contextmenu'
+            await this.#dispatch(event, isRightClick)
         }
 
         async #dispatch (event, isRightClick) {
