@@ -32,7 +32,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildResources(),
                     this.#buildSocialStanding(),
                     this.#buildCombat(),
-                    this.#buildConflictActions(),
                 ])
             } else if (this.actorType === 'npc') {
                 await Promise.all([
@@ -43,7 +42,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildResources(),
                     this.#buildSocialStanding(),
                     this.#buildCombat(),
-                    this.#buildConflictActions(),
                 ])
             } else if (!this.actor) {
                 await this.#buildCombat()
@@ -329,102 +327,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             if (actions.length > 0) this.addActions(actions, groupData)
-        }
-
-        async #buildConflictActions () {
-            const encounterType = game.combat
-                ? game.settings.get('l5r5e', 'initiative-encounter')
-                : null
-            if (!encounterType) return
-
-            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skill)
-
-            if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
-                const actions = []
-
-                if (this.items) {
-                    const weaponTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.weapon)
-                    for (const item of this.items.filter(i => i.type === 'weapon')) {
-                        const dmg = item.system.damage ?? 0
-                        const dead = item.system.deadliness ?? 0
-                        actions.push({
-                            id: `conflict-weapon-${item.id}`,
-                            name: item.name,
-                            listName: `${weaponTypeName}: ${item.name}`,
-                            img: coreModule.api.Utils.getImage(item),
-                            info1: { text: `${dmg}/${dead}`, title: `Damage: ${dmg} / Deadliness: ${dead}` },
-                            system: { actionType: 'weapon', actionId: item.id },
-                        })
-                    }
-                }
-
-                if (this.actorType === 'character') {
-                    const catSkills = this.actor.system.skills?.martial ?? {}
-                    const showZero = Utils.getSetting('showZeroRankSkills')
-                    for (const skillId of SKILLS_BY_CATEGORY.martial) {
-                        const rank = catSkills[skillId] ?? 0
-                        if (!showZero && rank === 0) continue
-                        const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillNames.${skillId}`)
-                        actions.push({
-                            id: `conflict-skill-martial-${skillId}`,
-                            name,
-                            listName: `${actionTypeName}: ${name}`,
-                            info1: { text: String(rank) },
-                            system: { actionType: 'skill', actionId: skillId, skillCatId: 'martial' },
-                        })
-                    }
-                } else if (this.actorType === 'npc') {
-                    const rank = this.actor.system.skills?.martial ?? 0
-                    const name = coreModule.api.Utils.i18n('tokenActionHud.l5r5e.skillGroupNames.martial')
-                    actions.push({
-                        id: 'conflict-skill-group-martial',
-                        name,
-                        listName: `${coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)}: ${name}`,
-                        info1: { text: String(rank) },
-                        system: { actionType: 'skillGroup', actionId: 'martial' },
-                    })
-                }
-
-                if (actions.length > 0) this.addActions(actions, GROUP.conflictSkirmish)
-
-            } else if (encounterType === 'intrigue') {
-                const actions = []
-                const showZero = Utils.getSetting('showZeroRankSkills')
-
-                if (this.actorType === 'character') {
-                    for (const catId of ['scholar', 'social']) {
-                        const catSkills = this.actor.system.skills?.[catId] ?? {}
-                        for (const skillId of SKILLS_BY_CATEGORY[catId]) {
-                            const rank = catSkills[skillId] ?? 0
-                            if (!showZero && rank === 0) continue
-                            const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillNames.${skillId}`)
-                            actions.push({
-                                id: `conflict-skill-${catId}-${skillId}`,
-                                name,
-                                listName: `${actionTypeName}: ${name}`,
-                                info1: { text: String(rank) },
-                                system: { actionType: 'skill', actionId: skillId, skillCatId: catId },
-                            })
-                        }
-                    }
-                } else if (this.actorType === 'npc') {
-                    const skillGroups = this.actor.system.skills ?? {}
-                    const sgTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
-                    for (const catId of ['scholar', 'social']) {
-                        const rank = skillGroups[catId] ?? 0
-                        const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillGroupNames.${catId}`)
-                        actions.push({
-                            id: `conflict-skill-group-${catId}`,
-                            name,
-                            listName: `${sgTypeName}: ${name}`,
-                            info1: { text: String(rank) },
-                            system: { actionType: 'skillGroup', actionId: catId },
-                        })
-                    }
-                }
-
-                if (actions.length > 0) this.addActions(actions, GROUP.conflictIntrigue)
-            }
         }
 
         #getActors () {
