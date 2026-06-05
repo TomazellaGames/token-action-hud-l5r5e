@@ -170,6 +170,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         async #handleInitiativeRoll (actor, token, encounterType) {
             await game.settings.set('l5r5e', 'initiative-encounter', encounterType)
+            if (!token) return
             const combatant = game.combat?.combatants.find(c => c.tokenId === token.id)
             if (combatant) {
                 await game.combat.rollInitiative([combatant.id])

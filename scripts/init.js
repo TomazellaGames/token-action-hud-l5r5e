@@ -9,3 +9,8 @@ Hooks.on('tokenActionHudCoreApiReady', async () => {
     }
     Hooks.call('tokenActionHudSystemReady', module)
 })
+
+Hooks.on('updateActor', (actor, data) => {
+    if (!foundry.utils.hasProperty(data, 'system.conflict.stance')) return
+    Hooks.callAll('forceUpdateTokenActionHud')
+})
