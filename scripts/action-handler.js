@@ -88,7 +88,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         async #buildConflictStance () {
             const actorRings = this.actor.system.rings
-            const currentStance = this.actor.system.conflict?.stance ?? null
+            const currentStance = this.actor.system.stance ?? null
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.stance)
 
             const actions = RINGS.map(ringId => {

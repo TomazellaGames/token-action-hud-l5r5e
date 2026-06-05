@@ -165,7 +165,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         async #handleStanceSet (actor, ringId) {
-            await actor.update({ 'system.conflict.stance': ringId })
+            await actor.update({ 'system.stance': ringId })
         }
 
         async #handleInitiativeRoll (actor, token, encounterType) {
