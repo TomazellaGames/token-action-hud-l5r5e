@@ -72,3 +72,23 @@ export const TECHNIQUE_TYPE_TO_GROUP = {
     title_ability:   'techniques-other',
     specificity:     'techniques-other',
 }
+
+export const SKIRMISH_TECHNIQUE_GROUPS = new Set([
+    'techniques-kata',
+    'techniques-kiho',
+    'techniques-ninjutsu',
+    'techniques-maho',
+    'techniques-rituals',
+    'techniques-other',
+])
+
+export const INTRIGUE_TECHNIQUE_GROUPS = new Set([
+    'techniques-shuji',
+    'techniques-invocations',
+    'techniques-rituals',
+    'techniques-other',
+])
+
+export const GENERIC_TECHNIQUE_GROUPS = new Set([
+    'techniques-other',
+])

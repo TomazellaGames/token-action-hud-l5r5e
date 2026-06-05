@@ -1,4 +1,4 @@
-import { ACTION_TYPE, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP } from './constants.js'
+import { ACTION_TYPE, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP, SKIRMISH_TECHNIQUE_GROUPS, INTRIGUE_TECHNIQUE_GROUPS, GENERIC_TECHNIQUE_GROUPS } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -22,27 +22,69 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 )
             }
 
+            const encounterType = game.combat
+                ? game.settings.get('l5r5e', 'initiative-encounter')
+                : null
+
             if (this.actorType === 'character') {
-                await Promise.all([
-                    this.#buildRings(),
-                    this.#buildSkills(),
-                    this.#buildWeapons(),
-                    this.#buildTechniques(),
-                    this.#buildNarrative(),
-                    this.#buildResources(),
-                    this.#buildSocialStanding(),
-                    this.#buildCombat(),
-                ])
+                if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildSkills(['martial']),
+                        this.#buildWeapons(),
+                        this.#buildTechniques(SKIRMISH_TECHNIQUE_GROUPS),
+                        this.#buildNarrative(),
+                        this.#buildResources(),
+                        this.#buildSocialStanding(),
+                        this.#buildCombat(),
+                    ])
+                } else if (encounterType === 'intrigue') {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildSkills(['artisan', 'scholar', 'social', 'trade']),
+                        this.#buildTechniques(INTRIGUE_TECHNIQUE_GROUPS),
+                        this.#buildNarrative(),
+                        this.#buildResources(),
+                        this.#buildSocialStanding(),
+                        this.#buildCombat(),
+                    ])
+                } else {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildTechniques(GENERIC_TECHNIQUE_GROUPS),
+                        this.#buildNarrative(),
+                        this.#buildResources(),
+                        this.#buildCombat(),
+                    ])
+                }
             } else if (this.actorType === 'npc') {
-                await Promise.all([
-                    this.#buildRings(),
-                    this.#buildNpcSkillGroups(),
-                    this.#buildWeapons(),
-                    this.#buildTechniques(),
-                    this.#buildResources(),
-                    this.#buildSocialStanding(),
-                    this.#buildCombat(),
-                ])
+                if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildNpcSkillGroups(['martial']),
+                        this.#buildWeapons(),
+                        this.#buildTechniques(SKIRMISH_TECHNIQUE_GROUPS),
+                        this.#buildResources(),
+                        this.#buildSocialStanding(),
+                        this.#buildCombat(),
+                    ])
+                } else if (encounterType === 'intrigue') {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildNpcSkillGroups(['artisan', 'scholar', 'social', 'trade']),
+                        this.#buildTechniques(INTRIGUE_TECHNIQUE_GROUPS),
+                        this.#buildResources(),
+                        this.#buildSocialStanding(),
+                        this.#buildCombat(),
+                    ])
+                } else {
+                    await Promise.all([
+                        this.#buildRings(),
+                        this.#buildTechniques(GENERIC_TECHNIQUE_GROUPS),
+                        this.#buildResources(),
+                        this.#buildCombat(),
+                    ])
+                }
             } else if (!this.actor) {
                 await this.#buildCombat()
             }
@@ -68,12 +110,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, groupData)
         }
 
-        async #buildSkills () {
+        async #buildSkills (allowedCategories = null) {
             const actorSkills = this.actor.system.skills
             const showZero = Utils.getSetting('showZeroRankSkills')
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skill)
 
             for (const [catId, skillList] of Object.entries(SKILLS_BY_CATEGORY)) {
+                if (allowedCategories && !allowedCategories.includes(catId)) continue
                 const catSkills = actorSkills[catId] ?? {}
                 const groupData = { id: `skills-${catId}`, type: 'system' }
                 const actions = []
@@ -95,11 +138,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
         }
 
-        async #buildNpcSkillGroups () {
+        async #buildNpcSkillGroups (allowedCategories = null) {
             const skillGroups = this.actor.system.skills ?? {}
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
 
             for (const catId of Object.keys(SKILLS_BY_CATEGORY)) {
+                if (allowedCategories && !allowedCategories.includes(catId)) continue
                 const rank = skillGroups[catId] ?? 0
                 const groupData = { id: `skills-${catId}`, type: 'system' }
                 const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillGroupNames.${catId}`)
@@ -136,7 +180,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (actions.length > 0) this.addActions(actions, groupData)
         }
 
-        async #buildTechniques () {
+        async #buildTechniques (allowedGroups = null) {
             if (!this.items) return
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.technique)
             const byGroup = new Map()
@@ -145,6 +189,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (item.type !== 'technique') continue
                 const techType = item.system.technique_type
                 const groupId = TECHNIQUE_TYPE_TO_GROUP[techType] ?? 'techniques-other'
+                if (allowedGroups && !allowedGroups.has(groupId)) continue
                 if (!byGroup.has(groupId)) byGroup.set(groupId, [])
                 byGroup.get(groupId).push(item)
             }
