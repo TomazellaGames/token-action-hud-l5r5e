@@ -1,4 +1,4 @@
-import { ACTION_TYPE, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP, SKIRMISH_TECHNIQUE_GROUPS, INTRIGUE_TECHNIQUE_GROUPS, GENERIC_TECHNIQUE_GROUPS } from './constants.js'
+import { ACTION_TYPE, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -22,69 +22,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 )
             }
 
-            const encounterType = game.combat
-                ? game.settings.get('l5r5e', 'initiative-encounter')
-                : null
-
             if (this.actorType === 'character') {
-                if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildSkills(['martial']),
-                        this.#buildWeapons(),
-                        this.#buildTechniques(SKIRMISH_TECHNIQUE_GROUPS),
-                        this.#buildNarrative(),
-                        this.#buildResources(),
-                        this.#buildSocialStanding(),
-                        this.#buildCombat(),
-                    ])
-                } else if (encounterType === 'intrigue') {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildSkills(['artisan', 'scholar', 'social', 'trade']),
-                        this.#buildTechniques(INTRIGUE_TECHNIQUE_GROUPS),
-                        this.#buildNarrative(),
-                        this.#buildResources(),
-                        this.#buildSocialStanding(),
-                        this.#buildCombat(),
-                    ])
-                } else {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildTechniques(GENERIC_TECHNIQUE_GROUPS),
-                        this.#buildNarrative(),
-                        this.#buildResources(),
-                        this.#buildCombat(),
-                    ])
-                }
+                await Promise.all([
+                    this.#buildRings(),
+                    this.#buildSkills(),
+                    this.#buildWeapons(),
+                    this.#buildTechniques(),
+                    this.#buildNarrative(),
+                    this.#buildResources(),
+                    this.#buildSocialStanding(),
+                    this.#buildCombat(),
+                    this.#buildConflictActions(),
+                ])
             } else if (this.actorType === 'npc') {
-                if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildNpcSkillGroups(['martial']),
-                        this.#buildWeapons(),
-                        this.#buildTechniques(SKIRMISH_TECHNIQUE_GROUPS),
-                        this.#buildResources(),
-                        this.#buildSocialStanding(),
-                        this.#buildCombat(),
-                    ])
-                } else if (encounterType === 'intrigue') {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildNpcSkillGroups(['artisan', 'scholar', 'social', 'trade']),
-                        this.#buildTechniques(INTRIGUE_TECHNIQUE_GROUPS),
-                        this.#buildResources(),
-                        this.#buildSocialStanding(),
-                        this.#buildCombat(),
-                    ])
-                } else {
-                    await Promise.all([
-                        this.#buildRings(),
-                        this.#buildTechniques(GENERIC_TECHNIQUE_GROUPS),
-                        this.#buildResources(),
-                        this.#buildCombat(),
-                    ])
-                }
+                await Promise.all([
+                    this.#buildRings(),
+                    this.#buildNpcSkillGroups(),
+                    this.#buildWeapons(),
+                    this.#buildTechniques(),
+                    this.#buildResources(),
+                    this.#buildSocialStanding(),
+                    this.#buildCombat(),
+                    this.#buildConflictActions(),
+                ])
             } else if (!this.actor) {
                 await this.#buildCombat()
             }
@@ -110,13 +70,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, groupData)
         }
 
-        async #buildSkills (allowedCategories = null) {
+        async #buildSkills () {
             const actorSkills = this.actor.system.skills
             const showZero = Utils.getSetting('showZeroRankSkills')
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skill)
 
             for (const [catId, skillList] of Object.entries(SKILLS_BY_CATEGORY)) {
-                if (allowedCategories && !allowedCategories.includes(catId)) continue
                 const catSkills = actorSkills[catId] ?? {}
                 const groupData = { id: `skills-${catId}`, type: 'system' }
                 const actions = []
@@ -138,12 +97,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
         }
 
-        async #buildNpcSkillGroups (allowedCategories = null) {
+        async #buildNpcSkillGroups () {
             const skillGroups = this.actor.system.skills ?? {}
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
 
             for (const catId of Object.keys(SKILLS_BY_CATEGORY)) {
-                if (allowedCategories && !allowedCategories.includes(catId)) continue
                 const rank = skillGroups[catId] ?? 0
                 const groupData = { id: `skills-${catId}`, type: 'system' }
                 const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillGroupNames.${catId}`)
@@ -180,7 +138,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (actions.length > 0) this.addActions(actions, groupData)
         }
 
-        async #buildTechniques (allowedGroups = null) {
+        async #buildTechniques () {
             if (!this.items) return
             const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.technique)
             const byGroup = new Map()
@@ -189,7 +147,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if (item.type !== 'technique') continue
                 const techType = item.system.technique_type
                 const groupId = TECHNIQUE_TYPE_TO_GROUP[techType] ?? 'techniques-other'
-                if (allowedGroups && !allowedGroups.has(groupId)) continue
                 if (!byGroup.has(groupId)) byGroup.set(groupId, [])
                 byGroup.get(groupId).push(item)
             }
@@ -372,6 +329,102 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             if (actions.length > 0) this.addActions(actions, groupData)
+        }
+
+        async #buildConflictActions () {
+            const encounterType = game.combat
+                ? game.settings.get('l5r5e', 'initiative-encounter')
+                : null
+            if (!encounterType) return
+
+            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skill)
+
+            if (encounterType === 'skirmish' || encounterType === 'duel' || encounterType === 'mass_battle') {
+                const actions = []
+
+                if (this.items) {
+                    const weaponTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.weapon)
+                    for (const item of this.items.filter(i => i.type === 'weapon')) {
+                        const dmg = item.system.damage ?? 0
+                        const dead = item.system.deadliness ?? 0
+                        actions.push({
+                            id: `conflict-weapon-${item.id}`,
+                            name: item.name,
+                            listName: `${weaponTypeName}: ${item.name}`,
+                            img: coreModule.api.Utils.getImage(item),
+                            info1: { text: `${dmg}/${dead}`, title: `Damage: ${dmg} / Deadliness: ${dead}` },
+                            system: { actionType: 'weapon', actionId: item.id },
+                        })
+                    }
+                }
+
+                if (this.actorType === 'character') {
+                    const catSkills = this.actor.system.skills?.martial ?? {}
+                    const showZero = Utils.getSetting('showZeroRankSkills')
+                    for (const skillId of SKILLS_BY_CATEGORY.martial) {
+                        const rank = catSkills[skillId] ?? 0
+                        if (!showZero && rank === 0) continue
+                        const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillNames.${skillId}`)
+                        actions.push({
+                            id: `conflict-skill-martial-${skillId}`,
+                            name,
+                            listName: `${actionTypeName}: ${name}`,
+                            info1: { text: String(rank) },
+                            system: { actionType: 'skill', actionId: skillId, skillCatId: 'martial' },
+                        })
+                    }
+                } else if (this.actorType === 'npc') {
+                    const rank = this.actor.system.skills?.martial ?? 0
+                    const name = coreModule.api.Utils.i18n('tokenActionHud.l5r5e.skillGroupNames.martial')
+                    actions.push({
+                        id: 'conflict-skill-group-martial',
+                        name,
+                        listName: `${coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)}: ${name}`,
+                        info1: { text: String(rank) },
+                        system: { actionType: 'skillGroup', actionId: 'martial' },
+                    })
+                }
+
+                if (actions.length > 0) this.addActions(actions, GROUP.conflictSkirmish)
+
+            } else if (encounterType === 'intrigue') {
+                const actions = []
+                const showZero = Utils.getSetting('showZeroRankSkills')
+
+                if (this.actorType === 'character') {
+                    for (const catId of ['scholar', 'social']) {
+                        const catSkills = this.actor.system.skills?.[catId] ?? {}
+                        for (const skillId of SKILLS_BY_CATEGORY[catId]) {
+                            const rank = catSkills[skillId] ?? 0
+                            if (!showZero && rank === 0) continue
+                            const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillNames.${skillId}`)
+                            actions.push({
+                                id: `conflict-skill-${catId}-${skillId}`,
+                                name,
+                                listName: `${actionTypeName}: ${name}`,
+                                info1: { text: String(rank) },
+                                system: { actionType: 'skill', actionId: skillId, skillCatId: catId },
+                            })
+                        }
+                    }
+                } else if (this.actorType === 'npc') {
+                    const skillGroups = this.actor.system.skills ?? {}
+                    const sgTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.skillGroup)
+                    for (const catId of ['scholar', 'social']) {
+                        const rank = skillGroups[catId] ?? 0
+                        const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.skillGroupNames.${catId}`)
+                        actions.push({
+                            id: `conflict-skill-group-${catId}`,
+                            name,
+                            listName: `${sgTypeName}: ${name}`,
+                            info1: { text: String(rank) },
+                            system: { actionType: 'skillGroup', actionId: catId },
+                        })
+                    }
+                }
+
+                if (actions.length > 0) this.addActions(actions, GROUP.conflictIntrigue)
+            }
         }
 
         #getActors () {

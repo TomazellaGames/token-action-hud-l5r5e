@@ -45,6 +45,8 @@ export const GROUP = {
     resources:                     { id: 'resources',                        name: 'tokenActionHud.l5r5e.resources',                      type: 'system' },
     socialStanding:                { id: 'social-standing',                  name: 'tokenActionHud.l5r5e.socialStanding',                 type: 'system' },
     combat:                        { id: 'combat',                           name: 'tokenActionHud.combat',                               type: 'system' },
+    conflictSkirmish:              { id: 'conflict-skirmish',                name: 'tokenActionHud.l5r5e.conflictSkirmish',                type: 'system' },
+    conflictIntrigue:              { id: 'conflict-intrigue',                name: 'tokenActionHud.l5r5e.conflictIntrigue',                type: 'system' },
 }
 
 export const RINGS = ['air', 'earth', 'fire', 'water', 'void']
@@ -73,22 +75,3 @@ export const TECHNIQUE_TYPE_TO_GROUP = {
     specificity:     'techniques-other',
 }
 
-export const SKIRMISH_TECHNIQUE_GROUPS = new Set([
-    'techniques-kata',
-    'techniques-kiho',
-    'techniques-ninjutsu',
-    'techniques-maho',
-    'techniques-rituals',
-    'techniques-other',
-])
-
-export const INTRIGUE_TECHNIQUE_GROUPS = new Set([
-    'techniques-shuji',
-    'techniques-invocations',
-    'techniques-rituals',
-    'techniques-other',
-])
-
-export const GENERIC_TECHNIQUE_GROUPS = new Set([
-    'techniques-other',
-])
