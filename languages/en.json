@@ -20,6 +20,8 @@
             "techniques": "Techniques",
             "resource":   "Resource",
             "resources":  "Resources",
+            "conflictActionsTab": "Conflict Actions",
+            "conflictActions":    "Actions",
             "conflict":   "Conflict",
             "endurance":  "Endurance",
             "composure":  "Composure",

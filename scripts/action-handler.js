@@ -1,4 +1,4 @@
-import { ACTION_TYPE, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP } from './constants.js'
+import { ACTION_TYPE, CONFLICT_ACTIONS, GROUP, RINGS, SKILLS_BY_CATEGORY, TECHNIQUE_TYPE_TO_GROUP } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -24,6 +24,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (this.actorType === 'character') {
                 await Promise.all([
+                    this.#buildConflictTypeActions(),
                     this.#buildConflict(),
                     this.#buildRings(),
                     this.#buildSkills(),
@@ -36,6 +37,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ])
             } else if (this.actorType === 'npc') {
                 await Promise.all([
+                    this.#buildConflictTypeActions(),
                     this.#buildConflict(),
                     this.#buildRings(),
                     this.#buildNpcSkillGroups(),
@@ -47,10 +49,32 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ])
             } else if (!this.actor) {
                 await Promise.all([
+                    this.#buildConflictTypeActions(),
                     this.#buildConflict(),
                     this.#buildCombat(),
                 ])
             }
+        }
+
+        async #buildConflictTypeActions () {
+            if (!this.token) return
+            const inCombat = game.combat?.combatants.find(c => c.tokenId === this.token.id)
+            if (!inCombat) return
+
+            let conflictType
+            try { conflictType = game.settings.get('l5r5e', 'initiative-encounter') } catch { return }
+            const typeActions = CONFLICT_ACTIONS[conflictType]
+            if (!typeActions?.length) return
+
+            const actions = typeActions.map(({ id, name, check, description }) => ({
+                id: `conflict-action-${id}`,
+                name,
+                listName: name,
+                info1: { text: check, title: check },
+                tooltip: description,
+                system: { actionType: 'narrativeText', actionId: id },
+            }))
+            this.addActions(actions, GROUP.conflictActions)
         }
 
         async #buildConflict () {
