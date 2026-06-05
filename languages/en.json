@@ -1,6 +1,15 @@
 {
     "tokenActionHud": {
         "l5r5e": {
+            "stance":           "Stance",
+            "conflictStance":   "Stance",
+            "initiative":       "Initiative",
+            "conflictInitiative": "Initiative",
+            "initiativeIntrigue":   "Intrigue",
+            "initiativeDuel":       "Duel",
+            "initiativeSkirmish":   "Skirmish",
+            "initiativeMassBattle": "Mass Battle",
+
             "ring":       "Ring",
             "rings":      "Rings",
             "skill":      "Skill",

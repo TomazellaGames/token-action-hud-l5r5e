@@ -19,6 +19,16 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     DEFAULTS = {
         layout: [
             {
+                nestId: 'conflict',
+                id: 'conflict',
+                name: i18n('tokenActionHud.l5r5e.conflict'),
+                groups: [
+                    { ...groups.conflictStance,     nestId: 'conflict_stance'     },
+                    { ...groups.conflictInitiative, nestId: 'conflict_initiative' },
+                    { ...groups.conflictCombat,     nestId: 'conflict_combat'     },
+                ],
+            },
+            {
                 nestId: 'rings',
                 id: 'rings',
                 name: i18n('tokenActionHud.l5r5e.rings'),

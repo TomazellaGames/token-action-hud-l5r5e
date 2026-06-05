@@ -28,6 +28,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const difficulty = this.#computeDifficulty(system)
 
             switch (system.actionType) {
+                case 'stance':
+                    if (!isRightClick) await this.#handleStanceSet(actor, system.actionId)
+                    break
+                case 'initiative':
+                    if (!isRightClick) await this.#handleInitiativeRoll(actor, token, system.actionId)
+                    break
                 case 'ring':
                     if (!isRightClick) await this.#handleRingRoll(actor, system.actionId, difficulty)
                     break
@@ -156,6 +162,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 : Math.min(current + 1, max)
 
             await actor.update({ [path]: newValue })
+        }
+
+        async #handleStanceSet (actor, ringId) {
+            await actor.update({ 'system.conflict.stance': ringId })
+        }
+
+        async #handleInitiativeRoll (actor, token, encounterType) {
+            await game.settings.set('l5r5e', 'initiative-encounter', encounterType)
+            const combatant = game.combat?.combatants.find(c => c.tokenId === token.id)
+            if (combatant) {
+                await game.combat.rollInitiative([combatant.id])
+            }
         }
 
         async #handleUtilityAction (token, actionId) {

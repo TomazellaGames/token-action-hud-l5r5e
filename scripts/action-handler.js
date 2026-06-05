@@ -24,6 +24,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             if (this.actorType === 'character') {
                 await Promise.all([
+                    this.#buildConflict(),
                     this.#buildRings(),
                     this.#buildSkills(),
                     this.#buildWeapons(),
@@ -35,6 +36,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ])
             } else if (this.actorType === 'npc') {
                 await Promise.all([
+                    this.#buildConflict(),
                     this.#buildRings(),
                     this.#buildNpcSkillGroups(),
                     this.#buildWeapons(),
@@ -44,8 +46,71 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildCombat(),
                 ])
             } else if (!this.actor) {
-                await this.#buildCombat()
+                await Promise.all([
+                    this.#buildConflict(),
+                    this.#buildCombat(),
+                ])
             }
+        }
+
+        async #buildConflict () {
+            const tasks = [this.#buildConflictEndTurn()]
+            if (this.actor) {
+                if (this.actorType === 'character') tasks.push(this.#buildConflictStance())
+                tasks.push(this.#buildConflictInitiative())
+            }
+            await Promise.all(tasks)
+        }
+
+        async #buildConflictStance () {
+            const actorRings = this.actor.system.rings
+            const currentStance = this.actor.system.conflict?.stance ?? null
+            const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE.stance)
+
+            const actions = RINGS.map(ringId => {
+                const rank = actorRings[ringId] ?? 0
+                const name = coreModule.api.Utils.i18n(`tokenActionHud.l5r5e.ringNames.${ringId}`)
+                return {
+                    id: `stance-${ringId}`,
+                    name,
+                    listName: `${actionTypeName}: ${name}`,
+                    info1: { text: currentStance === ringId ? `${rank}★` : String(rank) },
+                    system: { actionType: 'stance', actionId: ringId },
+                }
+            })
+
+            this.addActions(actions, GROUP.conflictStance)
+        }
+
+        async #buildConflictInitiative () {
+            const i18n = (key) => coreModule.api.Utils.i18n(key)
+            const actionTypeName = i18n(ACTION_TYPE.initiative)
+
+            const types = [
+                { id: 'intrigue',    name: i18n('tokenActionHud.l5r5e.initiativeIntrigue')    },
+                { id: 'duel',        name: i18n('tokenActionHud.l5r5e.initiativeDuel')        },
+                { id: 'skirmish',    name: i18n('tokenActionHud.l5r5e.initiativeSkirmish')    },
+                { id: 'mass_battle', name: i18n('tokenActionHud.l5r5e.initiativeMassBattle')  },
+            ]
+
+            const actions = types.map(({ id, name }) => ({
+                id: `initiative-${id}`,
+                name,
+                listName: `${actionTypeName}: ${name}`,
+                system: { actionType: 'initiative', actionId: id },
+            }))
+
+            this.addActions(actions, GROUP.conflictInitiative)
+        }
+
+        async #buildConflictEndTurn () {
+            if (game.combat?.current?.tokenId !== this.token?.id) return
+            this.addActions([{
+                id: 'conflict-endTurn',
+                name: coreModule.api.Utils.i18n('tokenActionHud.endTurn'),
+                listName: coreModule.api.Utils.i18n('tokenActionHud.endTurn'),
+                system: { actionType: 'utility', actionId: 'endTurn' },
+            }], GROUP.conflictCombat)
         }
 
         async #buildRings () {

@@ -9,6 +9,8 @@ export const CORE_MODULE = {
 export const REQUIRED_CORE_MODULE_VERSION = '2.1'
 
 export const ACTION_TYPE = {
+    stance:        'tokenActionHud.l5r5e.stance',
+    initiative:    'tokenActionHud.l5r5e.initiative',
     ring:          'tokenActionHud.l5r5e.ring',
     skill:         'tokenActionHud.l5r5e.skill',
     skillGroup:    'tokenActionHud.l5r5e.skillGroup',
@@ -23,6 +25,9 @@ export const ACTION_TYPE = {
 }
 
 export const GROUP = {
+    conflictStance:     { id: 'conflict-stance',     name: 'tokenActionHud.l5r5e.conflictStance',     type: 'system' },
+    conflictInitiative: { id: 'conflict-initiative', name: 'tokenActionHud.l5r5e.conflictInitiative', type: 'system' },
+    conflictCombat:     { id: 'conflict-combat',     name: 'tokenActionHud.combat',                   type: 'system' },
     rings:                 { id: 'rings',                 name: 'tokenActionHud.l5r5e.rings',                 type: 'system' },
     skillsArtisan:         { id: 'skills-artisan',         name: 'tokenActionHud.l5r5e.skillsArtisan',         type: 'system' },
     skillsMartial:         { id: 'skills-martial',         name: 'tokenActionHud.l5r5e.skillsMartial',         type: 'system' },
