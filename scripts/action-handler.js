@@ -282,9 +282,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const sys = this.actor.system
             const i18n = (key) => coreModule.api.Utils.i18n(key)
 
-            const honor  = sys.honor?.value  ?? sys.honor  ?? 0
-            const glory  = sys.glory?.value  ?? sys.glory  ?? 0
-            const status = sys.status?.value ?? sys.status ?? 0
+            const honor  = sys.social?.honor  ?? 0
+            const glory  = sys.social?.glory  ?? 0
+            const status = sys.social?.status ?? 0
 
             const actions = [
                 {
