@@ -4,7 +4,7 @@ A system module for [Token Action HUD Core](https://github.com/Larkinabout/fvtt-
 
 ![Foundry v14](https://img.shields.io/badge/Foundry-v14-informational)
 ![L5R5e](https://img.shields.io/badge/System-l5r5e-orange)
-![Version](https://img.shields.io/badge/Version-v1.1.0-blue)
+![Version](https://img.shields.io/badge/Version-v1.2.0-blue)
 
 ---
 
@@ -35,6 +35,25 @@ https://raw.githubusercontent.com/TomazellaGames/token-action-hud-l5r5e/main/mod
 ## HUD Overview
 
 Select any character or NPC token to see the HUD appear. It is divided into the following tabs:
+
+### Conflict Actions *(during combat only)*
+A tab that appears only when the token is a combatant in an active encounter. Shows the list of actions available for the current conflict type (set via the system's **Initiative Encounter** setting). The badge on each action shows its associated check(s). Hovering shows a description tooltip.
+
+| Conflict Type | Example Actions |
+|---------------|----------------|
+| Intrigue | Attack, Scheme, Charm, Command, Feign, Intimidate, … |
+| Duel | Attack, Center, Predict, Guard, Strike, Challenge, … |
+| Skirmish | Attack, Move, Guard, Support, Rally, Use Terrain, … |
+| Mass Battle | Assault, Challenge, Rally, Reinforce |
+
+### Conflict *(during combat only)*
+A tab that consolidates combat-related controls into three groups. Only appears while the token is participating in an active encounter.
+
+**Stance** *(Characters only)* — One button per elemental ring. Clicking sets the character's current stance to that ring. The badge shows the ring's rank; the active stance is marked with a ★.
+
+**Initiative** — Buttons to roll initiative for each conflict type (Intrigue, Duel, Skirmish, Mass Battle). Click to open the dice picker pre-filled for the chosen initiative type.
+
+**End Turn** — Ends the current combatant's turn. Appears only when it is this token's turn.
 
 ### Rings
 One button per elemental ring. The badge shows the ring's current rank. Clicking opens the dice picker for a pure ring check.
@@ -84,7 +103,7 @@ Three tracker buttons:
 | Void Points | Current / Max | +1 Void Point | −1 Void Point |
 
 ### Utility
-- **End Turn** — ends the current combatant's turn (only visible when it is this token's turn in an active combat).
+- **End Turn** — ends the current combatant's turn (only visible when it is this token's turn in an active combat). Also accessible from the **Conflict** tab.
 
 ---
 
@@ -118,15 +137,20 @@ Access via **Game Settings → Module Settings → Token Action HUD L5R5e**.
 
 ## Supported Actor Types
 
-| Type | Rings | Skills | Weapons | Techniques | Narrative | Resources | Utility |
-|------|-------|--------|---------|------------|-----------|-----------|---------|
-| Character | ✓ | Individual skills | ✓ | ✓ | ✓ | ✓ | ✓ |
-| NPC | ✓ | Skill groups | ✓ | ✓ | — | ✓ | ✓ |
-| Army | — | — | — | — | — | — | — |
+| Type | Conflict Actions | Conflict | Rings | Skills | Weapons | Techniques | Narrative | Resources | Utility |
+|------|-----------------|----------|-------|--------|---------|------------|-----------|-----------|---------|
+| Character | ✓ (combat) | ✓ (combat) | ✓ | Individual skills | ✓ | ✓ | ✓ | ✓ | ✓ |
+| NPC | ✓ (combat) | ✓ (combat) | ✓ | Skill groups | ✓ | ✓ | — | ✓ | ✓ |
+| Army | — | — | — | — | — | — | — | — | — |
 
 ---
 
 ## Changelog
+
+### v1.2.0
+- **Conflict Actions Tab** — A new tab visible only during combat that lists the available actions for the current conflict type (Intrigue, Duel, Skirmish, or Mass Battle) as defined by the system's encounter setting. Each action shows its required check and a hover description.
+- **Stance Changing** — A new Conflict tab (combat only) lets characters set their current stance by clicking any of the five elemental rings. The active stance is highlighted with a ★ on its badge.
+- **Initiative Rolling** — The Conflict tab includes initiative buttons for all four conflict types (Intrigue, Duel, Skirmish, Mass Battle), opening the dice picker pre-filled for the chosen type.
 
 ### v1.1.0
 - **NPC Skill Groups** — NPCs now have a Skills tab showing the five skill groups (Artisan, Martial, Scholar, Social, Trade) as rollable entries, each displaying the group's rank.
