@@ -15,6 +15,13 @@
             "endurance":  "Endurance",
             "composure":  "Composure",
             "voidPoints": "Void Points",
+            "focus":          "Focus",
+            "vigilance":      "Vigilance",
+            "stat":           "Stat",
+            "socialStanding": "Social Standing",
+            "honor":          "Honor",
+            "glory":          "Glory",
+            "status":         "Status",
 
             "skillGroup":    "Skill Group",
 

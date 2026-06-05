@@ -77,7 +77,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 id: 'stat-resources',
                 name: i18n('tokenActionHud.l5r5e.resources'),
                 groups: [
-                    { ...groups.resources, nestId: 'stat-resources_resources' },
+                    { ...groups.resources,      nestId: 'stat-resources_resources'      },
+                    { ...groups.socialStanding, nestId: 'stat-resources_social-standing' },
                 ],
             },
             {

@@ -18,6 +18,7 @@ export const ACTION_TYPE = {
     bond:          'tokenActionHud.l5r5e.bond',
     narrativeText: 'tokenActionHud.l5r5e.narrativeText',
     resource:      'tokenActionHud.l5r5e.resource',
+    stat:          'tokenActionHud.l5r5e.stat',
     utility:       'tokenActionHud.utility',
 }
 
@@ -42,6 +43,7 @@ export const GROUP = {
     narrativeBonds:                { id: 'narrative-bonds',                  name: 'tokenActionHud.l5r5e.narrativeBonds',                 type: 'system' },
     narrativeCharacter:            { id: 'narrative-character',              name: 'tokenActionHud.l5r5e.narrativeCharacter',             type: 'system' },
     resources:                     { id: 'resources',                        name: 'tokenActionHud.l5r5e.resources',                      type: 'system' },
+    socialStanding:                { id: 'social-standing',                  name: 'tokenActionHud.l5r5e.socialStanding',                 type: 'system' },
     combat:                        { id: 'combat',                           name: 'tokenActionHud.combat',                               type: 'system' },
 }
 

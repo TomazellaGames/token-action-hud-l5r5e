@@ -46,6 +46,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     if (!isRightClick) await this.#handleTechniqueActivation(actor, system.actionId)
                     break
                 case 'narrativeText':
+                case 'stat':
                     break
                 case 'resource':
                     await this.#handleResourceAction(actor, system.actionId, isRightClick)

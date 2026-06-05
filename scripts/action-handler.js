@@ -30,6 +30,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildTechniques(),
                     this.#buildNarrative(),
                     this.#buildResources(),
+                    this.#buildSocialStanding(),
                     this.#buildCombat(),
                 ])
             } else if (this.actorType === 'npc') {
@@ -39,6 +40,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.#buildWeapons(),
                     this.#buildTechniques(),
                     this.#buildResources(),
+                    this.#buildSocialStanding(),
                     this.#buildCombat(),
                 ])
             } else if (!this.actor) {
@@ -226,12 +228,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const sys = this.actor.system
             const i18n = (key) => coreModule.api.Utils.i18n(key)
 
-            const fatigue   = sys.fatigue?.value ?? 0
-            const endurance = sys.endurance ?? sys.fatigue?.max ?? 0
-            const strife    = sys.strife?.value ?? 0
-            const composure = sys.composure ?? sys.strife?.max ?? 0
-            const voidValue = sys.void_points?.value ?? 0
-            const voidMax   = sys.void_points?.max ?? 0
+            const fatigue    = sys.fatigue?.value ?? 0
+            const endurance  = sys.endurance ?? sys.fatigue?.max ?? 0
+            const strife     = sys.strife?.value ?? 0
+            const composure  = sys.composure ?? sys.strife?.max ?? 0
+            const voidValue  = sys.void_points?.value ?? 0
+            const voidMax    = sys.void_points?.max ?? 0
+            const focus      = sys.focus ?? 0
+            const vigilance  = sys.vigilance ?? 0
 
             const actions = [
                 {
@@ -255,9 +259,58 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     info1: { text: `${voidValue}/${voidMax}`, title: `Void Points: ${voidValue} / ${voidMax}` },
                     system: { actionType: 'resource', actionId: 'voidPoints' },
                 },
+                {
+                    id: 'stat-focus',
+                    name: i18n('tokenActionHud.l5r5e.focus'),
+                    listName: i18n('tokenActionHud.l5r5e.focus'),
+                    info1: { text: String(focus), title: `Focus: ${focus}` },
+                    system: { actionType: 'stat', actionId: 'focus' },
+                },
+                {
+                    id: 'stat-vigilance',
+                    name: i18n('tokenActionHud.l5r5e.vigilance'),
+                    listName: i18n('tokenActionHud.l5r5e.vigilance'),
+                    info1: { text: String(vigilance), title: `Vigilance: ${vigilance}` },
+                    system: { actionType: 'stat', actionId: 'vigilance' },
+                },
             ]
 
             this.addActions(actions, GROUP.resources)
+        }
+
+        async #buildSocialStanding () {
+            const sys = this.actor.system
+            const i18n = (key) => coreModule.api.Utils.i18n(key)
+
+            const honor  = sys.honor?.value  ?? sys.honor  ?? 0
+            const glory  = sys.glory?.value  ?? sys.glory  ?? 0
+            const status = sys.status?.value ?? sys.status ?? 0
+
+            const actions = [
+                {
+                    id: 'social-honor',
+                    name: i18n('tokenActionHud.l5r5e.honor'),
+                    listName: i18n('tokenActionHud.l5r5e.honor'),
+                    info1: { text: String(honor), title: `Honor: ${honor}` },
+                    system: { actionType: 'stat', actionId: 'honor' },
+                },
+                {
+                    id: 'social-glory',
+                    name: i18n('tokenActionHud.l5r5e.glory'),
+                    listName: i18n('tokenActionHud.l5r5e.glory'),
+                    info1: { text: String(glory), title: `Glory: ${glory}` },
+                    system: { actionType: 'stat', actionId: 'glory' },
+                },
+                {
+                    id: 'social-status',
+                    name: i18n('tokenActionHud.l5r5e.status'),
+                    listName: i18n('tokenActionHud.l5r5e.status'),
+                    info1: { text: String(status), title: `Status: ${status}` },
+                    system: { actionType: 'stat', actionId: 'status' },
+                },
+            ]
+
+            this.addActions(actions, GROUP.socialStanding)
         }
 
         async #buildCombat () {
