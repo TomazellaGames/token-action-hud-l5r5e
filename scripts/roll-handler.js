@@ -117,7 +117,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
             const item = actor.items.get(itemId)
             if (!item) return
-            new game.l5r5e.DicePickerDialog({ actor, itemUuid: item.uuid, difficulty }).render(true)
+            const skillId = item.system.skill || null
+            new game.l5r5e.DicePickerDialog({
+                actor,
+                itemUuid:   item.uuid,
+                skillId,
+                skillCatId: skillId ? 'martial' : null,
+                difficulty,
+            }).render(true)
         }
 
         async #handleTechniqueActivation (actor, itemId) {
