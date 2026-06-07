@@ -4,7 +4,7 @@ A system module for [Token Action HUD Core](https://github.com/Larkinabout/fvtt-
 
 ![Foundry v14](https://img.shields.io/badge/Foundry-v14-informational)
 ![L5R5e](https://img.shields.io/badge/System-l5r5e-orange)
-![Version](https://img.shields.io/badge/Version-v1.2.0-blue)
+![Version](https://img.shields.io/badge/Version-v1.2.1-blue)
 
 ---
 
@@ -109,16 +109,19 @@ Three tracker buttons:
 
 ## Target Difficulty
 
-When exactly **one target token** is selected, combat rolls automatically pre-set the starting difficulty in the dice picker based on the target's Air Ring:
+When exactly **one target token** is selected, Martial Arts rolls automatically pre-set the starting difficulty in the dice picker based on the **target's current stance ring**:
 
 | Condition | Starting Difficulty |
 |-----------|-------------------|
-| Non-combat roll (ring, social skill, etc.) | 1 |
-| Combat roll — no target selected | 2 |
-| Combat roll — target Air Ring 1–3 | 3 |
-| Combat roll — target Air Ring 4+ | 4 |
+| Non-combat roll (ring, non-martial skill, etc.) | 1 |
+| Technique roll — technique has a defined difficulty | technique's difficulty |
+| Technique roll — no difficulty defined | 1 |
+| Martial Arts roll — no target selected | 2 |
+| Martial Arts roll — target not in Air stance | 2 |
+| Martial Arts roll — target in Air stance, Air Ring 1–3 | 3 |
+| Martial Arts roll — target in Air stance, Air Ring 4+ | 4 |
 
-**Combat rolls** are: weapons, Martial skill group (NPC), and any skill in the Martial category (character).
+**Martial Arts rolls** are: weapons, and the individual skills Melee, Ranged, and Unarmed. Other martial skills (Fitness, Meditation, Tactics) default to TN 1.
 
 The difficulty field remains editable in the dice picker — this only sets the default.
 
@@ -146,6 +149,10 @@ Access via **Game Settings → Module Settings → Token Action HUD L5R5e**.
 ---
 
 ## Changelog
+
+### v1.2.1
+- **Target Difficulty fix** — Martial Arts rolls (Melee, Ranged, Unarmed, and weapons) now derive the default TN from the **target's active stance ring** rather than always using the Air Ring. If the target is in Air stance the TN is 3 or 4 based on their Air Ring rank; any other stance defaults to TN 2. Fitness, Meditation, and Tactics are no longer treated as combat rolls and default to TN 1.
+- **Technique TN** — Techniques without a defined difficulty now default to TN 1 instead of passing no default to the dice picker.
 
 ### v1.2.0
 - **Conflict Actions Tab** — A new tab visible only during combat that lists the available actions for the current conflict type (Intrigue, Duel, Skirmish, or Mass Battle) as defined by the system's encounter setting. Each action shows its required check and a hover description.
