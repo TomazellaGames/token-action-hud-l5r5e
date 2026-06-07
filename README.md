@@ -4,7 +4,7 @@ A system module for [Token Action HUD Core](https://github.com/Larkinabout/fvtt-
 
 ![Foundry v14](https://img.shields.io/badge/Foundry-v14-informational)
 ![L5R5e](https://img.shields.io/badge/System-l5r5e-orange)
-![Version](https://img.shields.io/badge/Version-v1.2.1-blue)
+![Version](https://img.shields.io/badge/Version-v1.2.2-blue)
 
 ---
 
@@ -149,6 +149,9 @@ Access via **Game Settings → Module Settings → Token Action HUD L5R5e**.
 ---
 
 ## Changelog
+
+### v1.2.2
+- **Weapon skill fix** — Clicking a weapon now correctly passes the weapon's linked skill (Melee, Ranged, or Unarmed) to the dice picker. Previously the skill field was omitted, so the dialog opened without the proper martial skill pre-selected.
 
 ### v1.2.1
 - **Target Difficulty fix** — Martial Arts rolls (Melee, Ranged, Unarmed, and weapons) now derive the default TN from the **target's active stance ring** rather than always using the Air Ring. If the target is in Air stance the TN is 3 or 4 based on their Air Ring rank; any other stance defaults to TN 2. Fitness, Meditation, and Tactics are no longer treated as combat rolls and default to TN 1.
