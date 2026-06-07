@@ -64,20 +64,25 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         #computeDifficulty (system) {
-            const isCombat = (
+            const MARTIAL_ARTS_SKILLS = ['melee', 'ranged', 'unarmed']
+            const isMartialArts = (
                 system.actionType === 'weapon' ||
-                (system.actionType === 'skillGroup' && system.actionId === 'martial') ||
-                (system.actionType === 'skill' && system.skillCatId === 'martial')
+                (system.actionType === 'skill' && system.skillCatId === 'martial' && MARTIAL_ARTS_SKILLS.includes(system.actionId))
             )
 
-            if (!isCombat) return 1
+            if (!isMartialArts) return 1
 
             const targets = game.user.targets
             if (targets.size !== 1) return 2
 
-            const targetAir = [...targets][0].actor?.system?.rings?.air ?? 0
-            if (targetAir >= 4) return 4
-            if (targetAir >= 1) return 3
+            const targetActor = [...targets][0].actor
+            const stance = targetActor?.system?.stance ?? null
+
+            if (stance === 'air') {
+                const targetAir = targetActor?.system?.rings?.air ?? 0
+                if (targetAir >= 4) return 4
+                return 3
+            }
             return 2
         }
 
@@ -125,7 +130,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             new game.l5r5e.DicePickerDialog({
                 actor,
                 ringId:     item.system.ring       || null,
-                difficulty: item.system.difficulty  || null,
+                difficulty: item.system.difficulty  || 1,
                 skillsList: item.system.skill       || null,
                 itemUuid:   item.uuid,
             }).render(true)
